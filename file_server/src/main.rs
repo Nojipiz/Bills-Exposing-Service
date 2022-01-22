@@ -1,19 +1,17 @@
 extern crate ini;
+mod persistence;
 
 use actix_web::{
-    error::ContentTypeError, get, post, web, App, HttpResponse, HttpServer, Responder,
+    error::ContentTypeError, get, web, App, HttpRequest, HttpResponse, HttpServer, Responder,
 };
-use futures::executor::block_on;
-use persistence::Settings;
+use persistence::{get_bill_by_number, get_settings, Settings};
 use serde::Serialize;
-use std::{fs, future::Future, process::Output};
-
-mod persistence;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(root))
-        .bind("")?
+    let settings: Settings = get_settings();
+    HttpServer::new(|| App::new().service(root).service(get_bill_file))
+        .bind(settings.address + ":" + &settings.port)?
         .run()
         .await
 }
@@ -23,8 +21,12 @@ async fn root() -> impl Responder {
     HttpResponse::Ok().body("This server is running")
 }
 
-fn print_dir() {
-    for file in fs::read_dir("$HOME/Downloads").unwrap() {
-        println!("{}", file.unwrap().path().display());
-    }
+#[get("/bills/{year}/{id}")]
+async fn get_bill_file(req: HttpRequest) -> impl Responder {
+    let bill_id: u32 = req.match_info().query("id").parse().unwrap();
+    let year: u32 = req.match_info().query("year").parse().unwrap();
+    let settings: Settings = get_settings();
+    let file: Vec<u8> =
+        get_bill_by_number(settings.path, bill_id, year, settings.extension).unwrap();
+    HttpResponse::Ok().body(file)
 }
