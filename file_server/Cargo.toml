@@ -1,5 +1,5 @@
 [package]
-name = "file-server"
+name = "file_server"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 actix-web = "3"
 serde = "1"
+rust-ini = "0.17"
