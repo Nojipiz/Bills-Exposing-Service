@@ -29,7 +29,7 @@ async fn get_bill_file(req: HttpRequest) -> impl Responder {
     let read_process: Result<String, Error> =
         get_bill_in_base64(settings.path, bill_id, period, settings.extension);
     match read_process {
-        Ok(encoded_file) => HttpResponse::Ok().body(encoded_file), //CHANGE
+        Ok(encoded_file) => HttpResponse::Ok().body(encoded_file),
         Err(error) => HttpResponseBuilder::new(StatusCode::NOT_FOUND).body(error.to_string()),
     }
 }
