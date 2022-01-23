@@ -1,0 +1,11 @@
+{
+  "name": "middle-server",
+  "version": "1.0.0",
+  "description": "Middle server for bills exposing service, this adds a little security layer between the frontend and the file server that prevents DDOS and file mine",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "node index.ts"
+  },
+  "author": "Orlando Vargas",
+  "license": "ISC"
+}
