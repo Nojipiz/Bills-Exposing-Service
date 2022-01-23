@@ -29,10 +29,10 @@ pub fn get_settings() -> Settings {
 pub fn get_bill_by_number(
     _path: String,
     _number: u32,
-    _year: u32,
+    _period: u32,
     _extension: String,
 ) -> Result<Vec<u8>, Error> {
-    let full_path: String = _path + "FETU" + &_number.to_string() + &_extension; // TODO: Year change
+    let full_path: String = _path + "FETU" + &_number.to_string() + &_extension; // TODO: Period Change
     print!("{}", &full_path);
     let mut file = File::open(full_path)?;
     let mut file_content = Vec::new();

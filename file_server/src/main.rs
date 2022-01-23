@@ -1,9 +1,7 @@
 extern crate ini;
 mod persistence;
 
-use actix_web::{
-    error::ContentTypeError, get, web, App, HttpRequest, HttpResponse, HttpServer, Responder,
-};
+use actix_web::{get, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
 use persistence::{get_bill_by_number, get_settings, Settings};
 use serde::Serialize;
 
@@ -24,9 +22,12 @@ async fn root() -> impl Responder {
 #[get("/bills/{year}/{id}")]
 async fn get_bill_file(req: HttpRequest) -> impl Responder {
     let bill_id: u32 = req.match_info().query("id").parse().unwrap();
-    let year: u32 = req.match_info().query("year").parse().unwrap();
+    let period: u32 = req.match_info().query("year").parse().unwrap();
     let settings: Settings = get_settings();
-    let file: Vec<u8> =
-        get_bill_by_number(settings.path, bill_id, year, settings.extension).unwrap();
-    HttpResponse::Ok().body(file)
+    let read_result: Result<Vec<u8>, Error> =
+        get_bill_by_number(settings.path, bill_id, period, settings.extension);
+    match read_result {
+        Ok(file) => HttpResponse::Ok().body(file),
+        Err(error) => HttpResponse::Ok().body(error.to_string()),
+    }
 }
