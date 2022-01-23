@@ -1,11 +1,20 @@
 {
   "name": "middle-server",
-  "version": "1.0.0",
-  "description": "Middle server for bills exposing service, this adds a little security layer between the frontend and the file server that prevents DDOS and file mine",
-  "main": "index.ts",
+  "version": "0.1.0",
+  "description": "Middle server for bills exposing service, this adds a security layer between the frontend and the file server by the way is more difficult to make a DDOS attack",
+  "main": "index.js",
   "scripts": {
-    "dev": "node index.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "Typescript",
+    "APi",
+    "middle-server"
+  ],
   "author": "Orlando Vargas",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.17.2",
+    "typescript": "^4.5.5"
+  }
 }
