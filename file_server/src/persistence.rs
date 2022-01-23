@@ -1,3 +1,4 @@
+extern crate base64;
 use actix_web::Error;
 use ini::Ini;
 use std::fs::File;
@@ -26,15 +27,16 @@ pub fn get_settings() -> Settings {
     }
 }
 
-pub fn get_bill_by_number(
+pub fn get_bill_in_base64(
     _path: String,
     _number: u32,
     _period: u32,
     _extension: String,
-) -> Result<Vec<u8>, Error> {
+) -> Result<String, Error> {
     let full_path: String = _path + "FETU" + &_number.to_string() + &_extension; // TODO: Period Change
     let mut file = File::open(full_path)?;
-    let mut file_content = Vec::new();
-    file.read_to_end(&mut file_content).unwrap();
-    Ok(file_content)
+    let mut binary_content = Vec::new();
+    file.read_to_end(&mut binary_content).unwrap();
+    let base64_content: String = base64::encode(binary_content);
+    Ok(base64_content)
 }

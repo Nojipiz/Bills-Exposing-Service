@@ -3,9 +3,9 @@ mod persistence;
 
 use actix_web::{
     dev::HttpResponseBuilder, get, http::StatusCode, App, Error, HttpRequest, HttpResponse,
-    HttpServer, Responder,
+    HttpServer, Responder, Result,
 };
-use persistence::{get_bill_by_number, get_settings, Settings};
+use persistence::{get_bill_in_base64, get_settings, Settings};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -26,10 +26,10 @@ async fn get_bill_file(req: HttpRequest) -> impl Responder {
     let bill_id: u32 = req.match_info().query("id").parse().unwrap();
     let period: u32 = req.match_info().query("year").parse().unwrap();
     let settings: Settings = get_settings();
-    let read_process: Result<Vec<u8>, Error> =
-        get_bill_by_number(settings.path, bill_id, period, settings.extension);
+    let read_process: Result<String, Error> =
+        get_bill_in_base64(settings.path, bill_id, period, settings.extension);
     match read_process {
-        Ok(file) => HttpResponse::Ok().body(file),
+        Ok(encoded_file) => HttpResponse::Ok().body(encoded_file), //CHANGE
         Err(error) => HttpResponseBuilder::new(StatusCode::NOT_FOUND).body(error.to_string()),
     }
 }
