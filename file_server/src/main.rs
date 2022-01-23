@@ -1,9 +1,11 @@
 extern crate ini;
 mod persistence;
 
-use actix_web::{get, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    dev::HttpResponseBuilder, get, http::StatusCode, App, Error, HttpRequest, HttpResponse,
+    HttpServer, Responder,
+};
 use persistence::{get_bill_by_number, get_settings, Settings};
-use serde::Serialize;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -24,10 +26,10 @@ async fn get_bill_file(req: HttpRequest) -> impl Responder {
     let bill_id: u32 = req.match_info().query("id").parse().unwrap();
     let period: u32 = req.match_info().query("year").parse().unwrap();
     let settings: Settings = get_settings();
-    let read_result: Result<Vec<u8>, Error> =
+    let read_process: Result<Vec<u8>, Error> =
         get_bill_by_number(settings.path, bill_id, period, settings.extension);
-    match read_result {
+    match read_process {
         Ok(file) => HttpResponse::Ok().body(file),
-        Err(error) => HttpResponse::Ok().body(error.to_string()),
+        Err(error) => HttpResponseBuilder::new(StatusCode::NOT_FOUND).body(error.to_string()),
     }
 }

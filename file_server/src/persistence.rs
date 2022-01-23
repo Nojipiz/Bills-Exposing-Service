@@ -33,7 +33,6 @@ pub fn get_bill_by_number(
     _extension: String,
 ) -> Result<Vec<u8>, Error> {
     let full_path: String = _path + "FETU" + &_number.to_string() + &_extension; // TODO: Period Change
-    print!("{}", &full_path);
     let mut file = File::open(full_path)?;
     let mut file_content = Vec::new();
     file.read_to_end(&mut file_content).unwrap();
