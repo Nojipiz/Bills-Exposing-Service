@@ -9,6 +9,8 @@ pub struct Settings {
     pub port: String,
     pub path: String,
     pub extension: String,
+    pub agent_key: String,
+    pub middle_url: String,
 }
 
 pub fn get_settings() -> Settings {
@@ -16,14 +18,20 @@ pub fn get_settings() -> Settings {
     let server_section = content.section(Some("Server")).unwrap();
     let address = server_section.get("address").unwrap().to_owned();
     let port = server_section.get("port").unwrap().to_owned();
+    let middle_url = server_section.get("middle_url").unwrap().to_owned();
     let directory_section = content.section(Some("Directory")).unwrap();
     let path = directory_section.get("path").unwrap().to_owned();
     let extension = directory_section.get("extension").unwrap().to_owned();
+    let security_section = content.section(Some("Security")).unwrap();
+    let agent_key = security_section.get("agent_key").unwrap().to_owned();
+
     Settings {
         address,
         port,
         path,
         extension,
+        agent_key,
+        middle_url,
     }
 }
 
