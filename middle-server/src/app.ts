@@ -17,6 +17,10 @@ app.get('/get_bill', (req: express.Request, res: express.Response) => {
   });
 })
 
+app.post('/set_server_address', (req: express.Request, res: express.Response) => {
+  console.log(req.header('address'));
+})
+
 app.listen(3000, () => {
   console.log(`Express server started in port ${PORT}`)
 })
