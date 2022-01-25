@@ -10,7 +10,7 @@ use persistence::{get_bill_in_base64, get_settings, Settings};
 async fn main() -> std::io::Result<()> {
     let settings: Settings = get_settings();
     match send_public_ip(&settings).await {
-        Ok(stat) => print!("{}", stat),
+        Ok(_stat) => (),
         Err(_e) => std::process::exit(0),
     };
     HttpServer::new(|| App::new().service(root).service(get_bill_file))

@@ -9,7 +9,7 @@ pub struct Settings {
     pub port: String,
     pub path: String,
     pub extension: String,
-    pub agent_key: String,
+    pub auth_value: String,
     pub middle_url: String,
 }
 
@@ -23,14 +23,14 @@ pub fn get_settings() -> Settings {
     let path = directory_section.get("path").unwrap().to_owned();
     let extension = directory_section.get("extension").unwrap().to_owned();
     let security_section = content.section(Some("Security")).unwrap();
-    let agent_key = security_section.get("agent_key").unwrap().to_owned();
+    let agent_key = security_section.get("auth").unwrap().to_owned();
 
     Settings {
         address,
         port,
         path,
         extension,
-        agent_key,
+        auth_value: agent_key,
         middle_url,
     }
 }
