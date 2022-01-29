@@ -3,6 +3,14 @@ import axios from 'axios';
 import { Config, getSavedConfig, saveConfig } from './persistence';
 
 const app = express()
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  next();
+});
+
 const PORT: number = 3000;
 const BILLS_END_POINT: string = "/bills/";
 
